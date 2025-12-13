@@ -3,7 +3,7 @@ import scala.util.Try
 
 val input: Array[Array[Char]] = Source.fromFile("input.txt").getLines().map(_.toCharArray).toArray
 
-def numberOfAdjacentRolls(grid: Array[Array[Char]], x: Int, y: Int): Int = {
+def isAccessibleByForklift(grid: Array[Array[Char]], x: Int, y: Int): Boolean = {
     val offsets = Array(
         (-1, -1),
         (-1, 0),
@@ -15,16 +15,14 @@ def numberOfAdjacentRolls(grid: Array[Array[Char]], x: Int, y: Int): Int = {
         (1, 1),
     )
 
-    return offsets.count(offset => Try(grid(y + offset(1))(x + offset(0))).toOption == Some('@'))
+    offsets.count(offset => Try(grid(y + offset(1))(x + offset(0))).toOption == Some('@')) < 4
 }
 
 def part1(input: Array[Array[Char]]): Int = {
     input.zipWithIndex.map {
         case(row, y) => {
             row.zipWithIndex.count {
-                case('@', x) => {
-                    numberOfAdjacentRolls(input, x, y) < 4
-                }
+                case('@', x) => isAccessibleByForklift(input, x, y)
                 case _ => false
             }
         }
