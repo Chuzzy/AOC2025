@@ -21,13 +21,24 @@ part2 = (input) =>
     [BigInt(match[1]), BigInt(match[2])] if match
   ).filter((x) => x)
 
-  ids = new Set
+  sorted = ranges.slice().sort (a, b) ->
+    if a[0] < b[0] then -1 else if a[0] > b[0] then 1 else 0
 
-  ranges.forEach((range) =>
-    ids.add(id) for id in [range[0]..range[1]]
-  )
+  total = 0n
+  cur_start = sorted[0][0]
+  cur_end = sorted[0][1]
+  for r in sorted.slice(1)
+    s = r[0]
+    e = r[1]
+    if s > cur_end + 1n
+      total += cur_end - cur_start + 1n
+      cur_start = s
+      cur_end = e
+    else
+      if e > cur_end then cur_end = e
 
-  ids.size
+  total += cur_end - cur_start + 1n
+  total
 
 console.log part1(input)
 console.log part2(input)
